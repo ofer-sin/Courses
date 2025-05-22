@@ -3,9 +3,10 @@ package main
 import (
 	"database/sql"
 	"log"
-	"simplebank/api"
-	db "simplebank/db/sqlc"
-	"simplebank/util"
+
+	"github.com/ofer-sin/Courses/BackendCourse/simplebank/api"
+	db "github.com/ofer-sin/Courses/BackendCourse/simplebank/db/sqlc"
+	"github.com/ofer-sin/Courses/BackendCourse/simplebank/util"
 
 	_ "github.com/lib/pq"
 )

@@ -8,14 +8,21 @@ import (
 	"fmt"
 )
 
-type Store struct {
+type Store interface {
+	// Embedding the Querier interface from mockgen package to access all its methods
+	// The Store interface embeds the Querier interface, which means it inherits all the methods defined in the Querier interface.
+	Querier
+	TransferTx(ctx context.Context, arg TransferTxParams) (TransferTxResult, error)
+}
+
+type SQLStore struct {
 	*Queries // Embedding Queries struct to access all its methods (just like inheritance)
 	db       *sql.DB
 }
 
 // NewStore creates a new Store instance with the provided database connection.
-func NewStore(db *sql.DB) *Store {
-	return &Store{
+func NewStore(db *sql.DB) Store {
+	return &SQLStore{
 		Queries: New(db),
 		db:      db,
 	}
@@ -26,7 +33,7 @@ func NewStore(db *sql.DB) *Store {
 // If the function returns an error, the transaction is rolled back.
 // If the function succeeds, the transaction is committed.
 // The function receives a Queries instance that is bound to the transaction, allowing it to perform database operations within the transaction context.
-func (store *Store) execTx(ctx context.Context, fn func(*Queries) error) error {
+func (store *SQLStore) execTx(ctx context.Context, fn func(*Queries) error) error {
 	tx, err := store.db.BeginTx(ctx, nil)
 	if err != nil {
 		return err
@@ -69,7 +76,7 @@ type TransferTxResult struct {
 // It creates a transfer record, updates the account balances, and creates entry records for both accounts.
 // It uses a transaction to ensure atomicity, meaning that either all operations succeed or none do.
 // The function returns a TransferTxResult containing the details of the transfer and the updated account balances.
-func (store *Store) TransferTx(ctx context.Context, arg TransferTxParams) (TransferTxResult, error) {
+func (store *SQLStore) TransferTx(ctx context.Context, arg TransferTxParams) (TransferTxResult, error) {
 	var result TransferTxResult
 
 	// Start the transaction

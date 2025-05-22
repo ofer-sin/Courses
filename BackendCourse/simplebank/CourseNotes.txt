@@ -62,8 +62,14 @@ Add relevant targets to Makefile
 
 // Add config file with Viper
 
-
-
+// Add a Mock DB with mockgen
+- Change the Store to an interface
+- Change emit_interface setting in sqol.yaml to true and run "make sqlc" to generate "Querier.go" with the interface
+- Create "db/mock" folder
+- Run the mockgen package to create a mock for the Store object:
+  mockgen -destination db/mock/store.go -package mockdb github.com/ofer-sin/Courses/BackendCourse/simplebank/db/sqlc Store
+  --> a new file db/mock/store.go is created with implementations for the mock db store
+  --> Create account_test.go inside api folder and test with the mock store
 
 
 

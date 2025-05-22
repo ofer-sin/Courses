@@ -1,9 +1,12 @@
-module simplebank
+module github.com/ofer-sin/Courses/BackendCourse/simplebank
 
-go 1.22
+go 1.21.0
+
+toolchain go1.24.2
 
 require (
 	github.com/gin-gonic/gin v1.10.1
+	github.com/golang/mock v1.6.0
 	github.com/lib/pq v1.10.9
 	github.com/spf13/viper v1.20.1
 	github.com/stretchr/testify v1.10.0
@@ -49,3 +52,5 @@ require (
 	google.golang.org/protobuf v1.36.1 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
+
+replace github.com/ofer-sin/Courses/BackendCourse/simplebank => .
